@@ -297,18 +297,33 @@
                 <button class="play-btn" onclick="openGame('1.4.0.html')">进入游戏</button>
             </div>
             <!-- 1.4.5 版本 -->
-            <div class="version-card latest">
-                <div class="latest-badge">最新版本</div>
+            <div class="version-card">
                 <div class="version-number">V1.4.5</div>
-                <div class="version-title">剧情版 🌟</div>
+                <div class="version-title">剧情版</div>
                 <div class="version-features">
                     • 命运抉择剧情事件
-
+                    
                     • 6位角色个人支线
-
-                    • 终极BOSS狂暴机制
+                    
+                    • 剧情日志系统
                 </div>
                 <button class="play-btn" onclick="openGame('1.4.5.html')">进入游戏</button>
+            </div>
+            <!-- 1.4.6 版本 -->
+            <div class="version-card latest">
+                <div class="latest-badge">最新版本</div>
+                <div class="version-number">V1.4.6</div>
+                <div class="version-title">修复版 🌟</div>
+                <div class="version-features">
+                    • 修复支线冷却未重置BUG
+                    
+                    • 修复终极BOSS狂暴机制
+                    
+                    • 修复剧情日志刷新BUG
+                    
+                    • 修复神话武器删除成就BUG
+                </div>
+                <button class="play-btn" onclick="openGame('1.4.6.html')">进入游戏</button>
             </div>
         </div>
         <div class="footer">
@@ -343,7 +358,7 @@
         }
         // 页面加载时检查所有文件
         window.addEventListener('load', () => {
-            const files = ['0.6.4.html', '0.6.6.html', '0.7.2.html', '1.0.0.html', '1.1.0.html', '1.2.0.html', '1.3.0.html', '1.3.5.html', '1.3.7.html', '1.4.0.html', '1.4.5.html'];
+            const files = ['0.6.4.html', '0.6.6.html', '0.7.2.html', '1.0.0.html', '1.1.0.html', '1.2.0.html', '1.3.0.html', '1.3.5.html', '1.3.7.html', '1.4.0.html', '1.4.5.html', '1.4.6.html'];
             files.forEach(file => checkFileExists(file));
         });
     </script>
