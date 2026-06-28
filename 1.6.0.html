@@ -1221,7 +1221,7 @@
 // ========== 附魔配置 ==========
 const ENCHANT_TYPES = [
     { id: 'burn', name: '灼烧', desc: '攻击附带持续伤害(5%攻击/回合, 3回合)', icon: '🔥', price: 50 },
-    { id: 'frost', name: '冰冻', desc: '降低目标速度20%(2回合)', icon: '❄️', price: 40 },
+    { id: 'frost', name: '冰冻', desc: '降低目标攻击力15%(2回合)', icon: '❄️', price: 40 },
     { id: 'thorn', name: '荆棘', desc: '受到攻击反弹15%伤害', icon: '🌿', price: 60 },
     { id: 'leech', name: '汲取', desc: '攻击恢复伤害值10%的生命', icon: '🩸', price: 55 },
     { id: 'rage', name: '狂暴', desc: '生命低于30%时攻击力+30%', icon: '💢', price: 70 },
@@ -1262,7 +1262,7 @@ const game = {
         members: [
             { 
                 name: '莉莉丝', class: '幻人', emoji: '👁️', level: 5, exp: 0, 
-                hp: 100, maxHp: 100, atk: 15, def: 8, spd: 12, skill: '存在质疑', 
+                hp: 100, maxHp: 100, baseMaxHp: 100, atk: 15, def: 8, baseDef: 8, spd: 12, baseSpd: 12, skill: '存在质疑', 
                 weapon: null, baseAtk: 15,
                 talentPoints: 0,
                 talents: {
@@ -1270,11 +1270,11 @@ const game = {
                     shadow: { level: 0, name: '暗影之路', desc: '强化暴击与暗影伤害', effects: ['暴击率+10%', '暗影伤害+20%', '暗影形态（攻击附带吸血）'] },
                     existence: { level: 0, name: '存在之路', desc: '强化生存与团队增益', effects: ['生命上限+15%', '全队攻击力+5%', '存在之证（复活一次）'] }
                 },
-                dodgeRate: 0, comboRate: 0, critRate: 0, shadowDamage: 0, lifeSteal: 0, revive: false
+                dodgeRate: 0, comboRate: 0, critRate: 0, shadowDamage: 0, lifeSteal: 0, revive: false, reviveUsed: false
             },
             { 
                 name: '夏特露', class: '研究者', emoji: '📚', level: 3, exp: 0, 
-                hp: 80, maxHp: 80, atk: 8, def: 10, spd: 8, skill: '知识解析', 
+                hp: 80, maxHp: 80, baseMaxHp: 80, atk: 8, def: 10, baseDef: 10, spd: 8, baseSpd: 8, skill: '知识解析', 
                 weapon: null, baseAtk: 8,
                 talentPoints: 0,
                 talents: {
@@ -1282,11 +1282,11 @@ const game = {
                     wisdom: { level: 0, name: '智慧之路', desc: '强化辅助与治疗', effects: ['治疗量+15%', '全队防御+5%', '智慧光环（全队经验+10%）'] },
                     secret: { level: 0, name: '秘术之路', desc: '强化禁术与预言', effects: ['禁术伤害+20%', '预言（暴击率+15%）', '命运逆转（一次免死）'] }
                 },
-                spellDamage: 0, ignoreDefense: 0, healBonus: 0, teamDefBonus: 0, expBonus: 0, fateRevive: false
+                spellDamage: 0, ignoreDefense: 0, healBonus: 0, teamDefBonus: 0, expBonus: 0, fateRevive: false, fateReviveUsed: false
             },
             { 
                 name: '弗子', class: '前魔王', emoji: '👑', level: 4, exp: 0, 
-                hp: 120, maxHp: 120, atk: 18, def: 12, spd: 6, skill: '魔王威压', 
+                hp: 120, maxHp: 120, baseMaxHp: 120, atk: 18, def: 12, baseDef: 12, spd: 6, baseSpd: 6, skill: '魔王威压', 
                 weapon: null, baseAtk: 18,
                 talentPoints: 0,
                 talents: {
@@ -1298,7 +1298,7 @@ const game = {
             },
             { 
                 name: '卡莲', class: '圣骑士', emoji: '⚔️', level: 4, exp: 0, 
-                hp: 110, maxHp: 110, atk: 14, def: 15, spd: 7, skill: '圣光审判', 
+                hp: 110, maxHp: 110, baseMaxHp: 110, atk: 14, def: 15, baseDef: 15, spd: 7, baseSpd: 7, skill: '圣光审判', 
                 weapon: null, baseAtk: 14,
                 talentPoints: 0,
                 talents: {
@@ -1306,11 +1306,11 @@ const game = {
                     justice: { level: 0, name: '审判之路', desc: '强化制裁与净化', effects: ['制裁伤害+15%', '净化（清除负面状态）', '神圣审判（对BOSS伤害+20%）'] },
                     faith: { level: 0, name: '信仰之路', desc: '强化信念与复活', effects: ['生命上限+20%', '信念（攻击+10%）', '圣光复活（死亡后复活一次）'] }
                 },
-                healBonus: 0, teamDefBonus: 0, regenHeal: 0, judgmentDmg: 0, bossDmgBonus: 0, revive: false
+                healBonus: 0, teamDefBonus: 0, regenHeal: 0, judgmentDmg: 0, bossDmgBonus: 0, faithHpBonus: 0, faithAtkBonus: 0, revive: false, reviveUsed: false
             },
             { 
                 name: '格林', class: '游侠', emoji: '🏹', level: 3, exp: 0, 
-                hp: 85, maxHp: 85, atk: 16, def: 6, spd: 14, skill: '箭雨风暴', 
+                hp: 85, maxHp: 85, baseMaxHp: 85, atk: 16, def: 6, baseDef: 6, spd: 14, baseSpd: 14, skill: '箭雨风暴', 
                 weapon: null, baseAtk: 16,
                 talentPoints: 0,
                 talents: {
@@ -1322,7 +1322,7 @@ const game = {
             },
             { 
                 name: '零', class: '虚无使者', emoji: '⚫', level: 5, exp: 0, 
-                hp: 130, maxHp: 130, atk: 20, def: 10, spd: 9, skill: '虚无吞噬', 
+                hp: 130, maxHp: 130, baseMaxHp: 130, atk: 20, def: 10, baseDef: 10, spd: 9, baseSpd: 9, skill: '虚无吞噬', 
                 weapon: null, baseAtk: 20,
                 talentPoints: 0,
                 talents: {
@@ -1488,7 +1488,7 @@ const game = {
             triggerDay: 5,
             options: [
                 { text: '🔮 尝试解读石板', result: '你成功解读了石板上的文字，获得了深渊之门的钥匙！解锁深渊挑战。', effect: (g) => { g.data.bossDefeated.push('解锁深渊'); g.log('🔑 解锁了深渊挑战！', 'loot'); }, tag: 'reward', tagText: '解锁深渊' },
-                { text: '📿 将石板供奉在公会', result: '石板散发出守护之力，全员生命上限+20。', effect: (g) => { g.data.members.forEach(m => { m.maxHp += 20; m.hp = Math.min(m.hp + 20, m.maxHp); }); g.log('✨ 全员生命上限+20！', 'heal'); }, tag: 'reward', tagText: '全体HP+20' },
+                { text: '📿 将石板供奉在公会', result: '石板散发出守护之力，全员生命上限+20。', effect: (g) => { g.data.members.forEach(m => { m.baseMaxHp += 20; m.maxHp += 20; m.hp = Math.min(m.hp + 20, m.maxHp); }); g.log('✨ 全员生命上限+20！', 'heal'); }, tag: 'reward', tagText: '全体HP+20' },
                 { text: '🔄 将石板出售', result: '你获得了大量金币。金币+800。', effect: (g) => { g.data.gold += 800; g.log('💰 获得了800金币！', 'loot'); }, tag: 'reward', tagText: '金币+800' }
             ]
         },
@@ -1563,7 +1563,7 @@ const game = {
             ]},
             { stage: 2, text: '卡莲发现圣光教会的历史中隐藏着黑暗的秘密。\n\n"原来……我一直在被蒙蔽。"', options: [
                 { text: '🔥 "揭露真相。"', result: '卡莲决定揭露教会的秘密。声望+20，防御力+5。', effect: (g) => { g.addFame(20); g.data.members[3].def += 5; g.data.story.personalQuests['卡莲'].progress = 2; g.data.story.personalQuests['卡莲'].unlockDay = g.data.day + 3; g.log('🔥 卡莲揭露了真相。', 'loot'); } },
-                { text: '🛡️ "选择宽容。"', result: '卡莲选择了原谅。获得圣光庇护（生命上限+20）。', effect: (g) => { g.data.members[3].maxHp += 20; g.data.members[3].hp = Math.min(g.data.members[3].hp + 20, g.data.members[3].maxHp); g.data.story.personalQuests['卡莲'].progress = 2; g.data.story.personalQuests['卡莲'].unlockDay = g.data.day + 3; g.log('🛡️ 卡莲获得了圣光庇护。', 'heal'); } }
+                { text: '🛡️ "选择宽容。"', result: '卡莲选择了原谅。获得圣光庇护（生命上限+20）。', effect: (g) => { g.data.members[3].baseMaxHp += 20; g.data.members[3].maxHp += 20; g.data.members[3].hp = Math.min(g.data.members[3].hp + 20, g.data.members[3].maxHp); g.data.story.personalQuests['卡莲'].progress = 2; g.data.story.personalQuests['卡莲'].unlockDay = g.data.day + 3; g.log('🛡️ 卡莲获得了圣光庇护。', 'heal'); } }
             ]},
             { stage: 3, text: '卡莲最终明白，真正的圣光不在教会，而在人心。\n\n"我会成为自己的光。"', options: [
                 { text: '🌟 "成为真正的圣骑士。"', result: '卡莲完成了她的支线！获得专属武器"圣光之心"（传奇品质）。', effect: (g) => { g.data.story.personalQuests['卡莲'].completed = true; g.data.story.personalQuests['卡莲'].progress = 3; const w = { name: '圣光之心', emoji: '🌟', atk: 49, quality: 'legendary' }; g.data.weapons.push(w); g.log('👑 卡莲获得了专属武器"圣光之心"！', 'weapon'); } }
@@ -1762,8 +1762,10 @@ const game = {
         }
         
         if (floor % 5 === 0 && floor > 0) {
-            this.data.members[0].talentPoints = (this.data.members[0].talentPoints || 0) + 1;
-            this.notify(`🌳 塔层 ${floor} 奖励天赋点！`);
+            this.data.members.forEach(m => {
+                if (m.hp > 0) m.talentPoints = (m.talentPoints || 0) + 1;
+            });
+            this.notify(`🌳 塔层 ${floor} 奖励！所有存活成员获得1点天赋点！`);
         }
         
         // 检查塔成就
@@ -2038,18 +2040,137 @@ const game = {
     },
     
     updateMemberAtk() {
+        const teamAtkBonus = this.getTeamAtkBonus();
         this.data.members.forEach(m => {
             let weaponBonus = 0;
             if (m.weapon) weaponBonus = m.weapon.atk;
-            m.atk = m.baseAtk + weaponBonus;
+            let atk = m.baseAtk + weaponBonus;
+            if (m.atkBonus) atk = Math.floor(atk * (1 + m.atkBonus));
+            if (m.allStatBonus) atk = Math.floor(atk * (1 + m.allStatBonus));
+            if (m.faithAtkBonus) atk = Math.floor(atk * (1 + m.faithAtkBonus));
+            if (teamAtkBonus > 0) atk = Math.floor(atk * (1 + teamAtkBonus));
+            m.atk = atk;
         });
+    },
+    
+    updateMemberDef() {
+        const teamDefBonus = this.getTeamDefBonus();
+        this.data.members.forEach(m => {
+            let def = m.baseDef;
+            if (m.defBonus) def = Math.floor(def * (1 + m.defBonus));
+            if (m.allStatBonus) def = Math.floor(def * (1 + m.allStatBonus));
+            if (teamDefBonus > 0) def = Math.floor(def * (1 + teamDefBonus));
+            m.def = def;
+        });
+    },
+    
+    updateMemberMaxHp() {
+        const teamHpBonus = this.getTeamHpBonus();
+        this.data.members.forEach(m => {
+            let maxHp = m.baseMaxHp;
+            const hpRatio = m.hp / m.maxHp;
+            if (m.teamHpBonus) maxHp = Math.floor(maxHp * (1 + m.teamHpBonus));
+            if (m.faithHpBonus) maxHp = Math.floor(maxHp * (1 + m.faithHpBonus));
+            if (teamHpBonus > 0) maxHp = Math.floor(maxHp * (1 + teamHpBonus));
+            if (maxHp < m.maxHp) {
+                m.hp = Math.min(m.hp, maxHp);
+            } else if (maxHp > m.maxHp) {
+                m.hp = Math.min(Math.floor(m.maxHp * hpRatio + (maxHp - m.maxHp)), maxHp);
+            }
+            m.maxHp = maxHp;
+        });
+    },
+    
+    getTeamAtkBonus() {
+        let bonus = 0;
+        this.data.members.forEach(m => {
+            if (m.hp > 0) {
+                if (m.teamAtkBonus) bonus = Math.max(bonus, m.teamAtkBonus);
+                if (m.teamAtk) bonus = Math.max(bonus, m.teamAtk);
+            }
+        });
+        return bonus;
+    },
+    
+    getTeamDefBonus() {
+        let bonus = 0;
+        this.data.members.forEach(m => {
+            if (m.hp > 0 && m.teamDefBonus) {
+                bonus = Math.max(bonus, m.teamDefBonus);
+            }
+        });
+        return bonus;
+    },
+    
+    getTeamHpBonus() {
+        let bonus = 0;
+        this.data.members.forEach(m => {
+            if (m.hp > 0 && m.teamHpBonus) {
+                bonus = Math.max(bonus, m.teamHpBonus);
+            }
+        });
+        return bonus;
+    },
+    
+    getTeamLifeSteal() {
+        let bonus = 0;
+        this.data.members.forEach(m => {
+            if (m.hp > 0 && m.teamLifeSteal) {
+                bonus = Math.max(bonus, m.teamLifeSteal);
+            }
+        });
+        return bonus;
     },
     
     updateTalentEffects() {
         this.data.members.forEach(m => {
-            let totalTalentLevel = 0;
-            Object.values(m.talents).forEach(t => totalTalentLevel += t.level);
+            m.dodgeRate = 0;
+            m.comboRate = 0;
+            m.critRate = 0;
+            m.shadowDamage = 0;
+            m.lifeSteal = 0;
+            m.revive = false;
+            m.spellDamage = 0;
+            m.ignoreDefense = 0;
+            m.healBonus = 0;
+            m.teamDefBonus = 0;
+            m.expBonus = 0;
+            m.fateRevive = false;
+            m.atkBonus = 0;
+            m.defBonus = 0;
+            m.teamAtkBonus = 0;
+            m.teamHpBonus = 0;
+            m.regen = 0;
+            m.allStatBonus = 0;
+            m.judgmentDmg = 0;
+            m.bossDmgBonus = 0;
+            m.regenHeal = 0;
+            m.rangedDmg = 0;
+            m.ignoreDodge = false;
+            m.eliteDmg = 0;
+            m.spdBonus = 0;
+            m.extraAttack = false;
+            m.voidEffect = 0;
+            m.teamLifeSteal = 0;
+            m.shadowDmg = 0;
+            m.critDmg = 0;
+            m.weakenTarget = 0;
+            m.teamAtk = 0;
+            m.phantomStrike = false;
+            m.faithHpBonus = 0;
+            m.faithAtkBonus = 0;
         });
+        this.data.members.forEach((m, idx) => {
+            Object.keys(m.talents).forEach(routeKey => {
+                const talent = m.talents[routeKey];
+                if (talent.level > 0) {
+                    this.applyTalentEffect(m, routeKey, talent.level);
+                }
+            });
+        });
+        this.updateMemberAtk();
+        this.updateMemberDef();
+        this.updateMemberMaxHp();
     },
     
     // ========== 声望系统 ==========
@@ -2122,7 +2243,7 @@ const game = {
         container.innerHTML = '';
         const missions = this.data.missions.available;
         if (missions.length === 0) {
-            container.innerHTML = '<div style="color:#718096;text-align:center;padding:10px;">今日任务已刷新，点击结束新的一天查看</div>';
+            container.innerHTML = '<div style="color:#718096;text-align:center;padding:10px;">今日任务已全部完成，结束新的一天后刷新</div>';
             return;
         }
         missions.forEach((mission, idx) => {
@@ -2355,12 +2476,13 @@ const game = {
         talent.level++;
         this.notify(`🌳 ${member.name} 的 ${talent.name} 升级到 Lv.${talent.level}！`);
         this.log(`🌳 ${member.name} 的 ${talent.name} 升级到 Lv.${talent.level}`, 'talent');
-        this.applyTalentEffect(member, routeKey, talent.level);
+        this.updateTalentEffects();
         let allMax = true;
         Object.values(member.talents).forEach(t => { if (t.level < 3) allMax = false; });
         if (allMax) this.unlockAchievement('talentMaster');
         this.showMemberDetail(memberIndex);
         this.updateUI();
+        this.renderMembers();
         this.saveToSlot(this.currentSlot);
     },
     
@@ -2368,23 +2490,23 @@ const game = {
         const effects = {
             '莉莉丝': {
                 'phantom': (m, lv) => { m.dodgeRate = lv * 0.1; m.comboRate = lv >= 2 ? 0.15 : 0; m.phantomStrike = lv >= 3; },
-                'shadow': (m, lv) => { m.critRate = lv * 0.1; m.shadowDamage = lv >= 2 ? 0.2 : 0; m.lifeSteal = lv >= 3 ? 0.15 : 0; },
-                'existence': (m, lv) => { if (lv >= 1) m.maxHp *= 1.15; m.revive = lv >= 3; }
+                'shadow': (m, lv) => { m.critRate = lv * 0.1; m.shadowDamage = lv >= 2 ? 0.2 : 0; m.shadowDmg = m.shadowDamage; m.lifeSteal = lv >= 3 ? 0.15 : 0; },
+                'existence': (m, lv) => { m.teamAtkBonus = lv >= 2 ? 0.05 : 0; m.revive = lv >= 3; }
             },
             '夏特露': {
                 'knowledge': (m, lv) => { m.spellDamage = lv * 0.1; m.ignoreDefense = lv >= 2 ? 0.1 : 0; },
                 'wisdom': (m, lv) => { m.healBonus = lv * 0.15; m.teamDefBonus = lv >= 2 ? 0.05 : 0; m.expBonus = lv >= 3 ? 0.1 : 0; },
-                'secret': (m, lv) => { m.fateRevive = lv >= 3; }
+                'secret': (m, lv) => { m.critRate = lv >= 2 ? 0.15 : 0; m.fateRevive = lv >= 3; }
             },
             '弗子': {
                 'conquest': (m, lv) => { m.atkBonus = lv * 0.1; m.teamAtkBonus = lv >= 3 ? 0.1 : 0; },
                 'dominion': (m, lv) => { m.defBonus = lv * 0.15; m.teamHpBonus = lv >= 2 ? 0.1 : 0; m.regen = lv >= 3 ? 0.05 : 0; },
-                'legacy': (m, lv) => { m.expBonus = lv * 0.15; m.allStatBonus = lv >= 3 ? 0.05 : 0; }
+                'legacy': (m, lv) => { m.expBonus = lv * 0.15; m.spellDamage = lv >= 2 ? 0.2 : 0; m.allStatBonus = lv >= 3 ? 0.05 : 0; }
             },
             '卡莲': {
                 'light': (m, lv) => { m.healBonus = lv * 0.2; m.teamDefBonus = lv >= 2 ? 0.1 : 0; m.regenHeal = lv >= 3 ? 0.05 : 0; },
                 'justice': (m, lv) => { m.judgmentDmg = lv * 0.15; m.bossDmgBonus = lv >= 3 ? 0.2 : 0; },
-                'faith': (m, lv) => { m.revive = lv >= 3; }
+                'faith': (m, lv) => { m.faithHpBonus = lv * 0.2; m.faithAtkBonus = lv >= 2 ? 0.1 : 0; m.revive = lv >= 3; }
             },
             '格林': {
                 'marksman': (m, lv) => { m.critRate = lv * 0.15; m.rangedDmg = lv >= 2 ? 0.15 : 0; m.ignoreDodge = lv >= 3; },
@@ -2393,7 +2515,7 @@ const game = {
             },
             '零': {
                 'void': (m, lv) => { m.voidEffect = lv * 0.3; m.lifeSteal = lv >= 2 ? 0.15 : 0; m.teamLifeSteal = lv >= 3 ? 0.1 : 0; },
-                'abyss': (m, lv) => { m.shadowDmg = lv * 0.25; m.critDmg = lv >= 2 ? 0.3 : 0; m.weakenTarget = lv >= 3 ? 0.2 : 0; },
+                'abyss': (m, lv) => { m.shadowDmg = lv * 0.25; m.shadowDamage = m.shadowDmg; m.critDmg = lv >= 2 ? 0.3 : 0; m.weakenTarget = lv >= 3 ? 0.2 : 0; },
                 'existence': (m, lv) => { m.teamAtk = lv * 0.08; m.defBonus = lv >= 2 ? 0.15 : 0; m.allStatBonus = lv >= 3 ? 0.08 : 0; }
             }
         };
@@ -2401,7 +2523,6 @@ const game = {
         if (charEffects && charEffects[routeKey]) {
             charEffects[routeKey](member, level);
         }
-        this.updateMemberAtk();
     },
     
     // ========== 存档系统 ==========
@@ -2487,10 +2608,13 @@ const game = {
                     m.talents = defaultTalents[m.name] || { route1: { level: 0, name: '基础之路', desc: '基础天赋', effects: ['+5%攻击'] } };
                 }
                 if (m.talentPoints === undefined) m.talentPoints = 0;
-                const defaultProps = ['dodgeRate', 'comboRate', 'critRate', 'shadowDamage', 'lifeSteal', 'revive', 'spellDamage', 'ignoreDefense', 'healBonus', 'teamDefBonus', 'expBonus', 'fateRevive', 'atkBonus', 'defBonus', 'teamAtkBonus', 'teamHpBonus', 'regen', 'allStatBonus', 'judgmentDmg', 'bossDmgBonus', 'regenHeal', 'rangedDmg', 'ignoreDodge', 'eliteDmg', 'spdBonus', 'extraAttack', 'voidEffect', 'teamLifeSteal', 'shadowDmg', 'critDmg', 'weakenTarget', 'teamAtk', 'phantomStrike'];
+                const defaultProps = ['dodgeRate', 'comboRate', 'critRate', 'shadowDamage', 'lifeSteal', 'revive', 'spellDamage', 'ignoreDefense', 'healBonus', 'teamDefBonus', 'expBonus', 'fateRevive', 'atkBonus', 'defBonus', 'teamAtkBonus', 'teamHpBonus', 'regen', 'allStatBonus', 'judgmentDmg', 'bossDmgBonus', 'regenHeal', 'rangedDmg', 'ignoreDodge', 'eliteDmg', 'spdBonus', 'extraAttack', 'voidEffect', 'teamLifeSteal', 'shadowDmg', 'critDmg', 'weakenTarget', 'teamAtk', 'phantomStrike', 'reviveUsed', 'fateReviveUsed', 'faithHpBonus', 'faithAtkBonus'];
                 defaultProps.forEach(prop => {
                     if (m[prop] === undefined) m[prop] = 0;
                 });
+                if (m.baseMaxHp === undefined) m.baseMaxHp = m.maxHp;
+                if (m.baseDef === undefined) m.baseDef = m.def;
+                if (m.baseSpd === undefined) m.baseSpd = m.spd;
             });
             
             if (parsed.battlesToday === undefined) parsed.battlesToday = 0;
@@ -2699,12 +2823,12 @@ const game = {
         this.data = {
             day: 1, gold: 150, fame: 0, guildLevel: 1, guildExp: 0,
             members: [
-                { name: '莉莉丝', class: '幻人', emoji: '👁️', level: 5, exp: 0, hp: 100, maxHp: 100, atk: 15, def: 8, spd: 12, skill: '存在质疑', weapon: null, baseAtk: 15, talentPoints: 0, talents: { phantom: { level: 0, name: '幻影之路', desc: '强化闪避与连击', effects: ['闪避率+10%', '连击概率+15%', '幻影分身（额外攻击一次）'] }, shadow: { level: 0, name: '暗影之路', desc: '强化暴击与暗影伤害', effects: ['暴击率+10%', '暗影伤害+20%', '暗影形态（攻击附带吸血）'] }, existence: { level: 0, name: '存在之路', desc: '强化生存与团队增益', effects: ['生命上限+15%', '全队攻击力+5%', '存在之证（复活一次）'] } }, dodgeRate: 0, comboRate: 0, critRate: 0, shadowDamage: 0, lifeSteal: 0, revive: false },
-                { name: '夏特露', class: '研究者', emoji: '📚', level: 3, exp: 0, hp: 80, maxHp: 80, atk: 8, def: 10, spd: 8, skill: '知识解析', weapon: null, baseAtk: 8, talentPoints: 0, talents: { knowledge: { level: 0, name: '知识之路', desc: '强化法术与解析', effects: ['法术伤害+10%', '解析弱点（无视10%防御）', '全知（技能冷却-1）'] }, wisdom: { level: 0, name: '智慧之路', desc: '强化辅助与治疗', effects: ['治疗量+15%', '全队防御+5%', '智慧光环（全队经验+10%）'] }, secret: { level: 0, name: '秘术之路', desc: '强化禁术与预言', effects: ['禁术伤害+20%', '预言（暴击率+15%）', '命运逆转（一次免死）'] } }, spellDamage: 0, ignoreDefense: 0, healBonus: 0, teamDefBonus: 0, expBonus: 0, fateRevive: false },
-                { name: '弗子', class: '前魔王', emoji: '👑', level: 4, exp: 0, hp: 120, maxHp: 120, atk: 18, def: 12, spd: 6, skill: '魔王威压', weapon: null, baseAtk: 18, talentPoints: 0, talents: { conquest: { level: 0, name: '征服之路', desc: '强化攻击与压制', effects: ['攻击力+10%', '压制（目标防御-15%）', '魔王降临（全体攻击+10%）'] }, dominion: { level: 0, name: '统治之路', desc: '强化防御与统御', effects: ['防御力+15%', '统御（全队生命+10%）', '不朽（每回合恢复5%生命）'] }, legacy: { level: 0, name: '遗产之路', desc: '强化记忆与传承', effects: ['经验获取+15%', '传承（技能伤害+20%）', '王者的记忆（全属性+5%）'] } }, atkBonus: 0, defBonus: 0, teamAtkBonus: 0, teamHpBonus: 0, regen: 0, expBonus: 0, allStatBonus: 0 },
-                { name: '卡莲', class: '圣骑士', emoji: '⚔️', level: 4, exp: 0, hp: 110, maxHp: 110, atk: 14, def: 15, spd: 7, skill: '圣光审判', weapon: null, baseAtk: 14, talentPoints: 0, talents: { light: { level: 0, name: '圣光之路', desc: '强化治疗与守护', effects: ['治疗量+20%', '守护（全队防御+10%）', '圣光庇护（每回合治疗5%）'] }, justice: { level: 0, name: '审判之路', desc: '强化制裁与净化', effects: ['制裁伤害+15%', '净化（清除负面状态）', '神圣审判（对BOSS伤害+20%）'] }, faith: { level: 0, name: '信仰之路', desc: '强化信念与复活', effects: ['生命上限+20%', '信念（攻击+10%）', '圣光复活（死亡后复活一次）'] } }, healBonus: 0, teamDefBonus: 0, regenHeal: 0, judgmentDmg: 0, bossDmgBonus: 0, revive: false },
-                { name: '格林', class: '游侠', emoji: '🏹', level: 3, exp: 0, hp: 85, maxHp: 85, atk: 16, def: 6, spd: 14, skill: '箭雨风暴', weapon: null, baseAtk: 16, talentPoints: 0, talents: { marksman: { level: 0, name: '射手之路', desc: '强化远程与暴击', effects: ['暴击率+15%', '远程伤害+15%', '百步穿杨（无视闪避）'] }, hunter: { level: 0, name: '猎手之路', desc: '强化追踪与生存', effects: ['对精英/BOSS伤害+15%', '追踪（速度+20%）', '生存本能（闪避+20%）'] }, wind: { level: 0, name: '疾风之路', desc: '强化速度与连击', effects: ['速度+20%', '连击概率+20%', '疾风骤雨（攻击次数+1）'] } }, critRate: 0, rangedDmg: 0, ignoreDodge: 0, eliteDmg: 0, spdBonus: 0, extraAttack: false },
-                { name: '零', class: '虚无使者', emoji: '⚫', level: 5, exp: 0, hp: 130, maxHp: 130, atk: 20, def: 10, spd: 9, skill: '虚无吞噬', weapon: null, baseAtk: 20, talentPoints: 0, talents: { void: { level: 0, name: '虚无之路', desc: '强化吞噬与转化', effects: ['吞噬效果+30%', '转化（伤害转生命+15%）', '虚无领域（全队吸血+10%）'] }, abyss: { level: 0, name: '深渊之路', desc: '强化暗影与毁灭', effects: ['暗影伤害+25%', '毁灭（暴击伤害+30%）', '深渊凝视（降低目标攻击20%）'] }, existence: { level: 0, name: '存在之路', desc: '强化连接与平衡', effects: ['全队攻击+8%', '平衡（防御+15%）', '存在之桥（全属性+8%）'] } }, voidEffect: 0, lifeSteal: 0, teamLifeSteal: 0, shadowDmg: 0, critDmg: 0, weakenTarget: 0, teamAtk: 0, defBonus: 0, allStatBonus: 0 }
+                { name: '莉莉丝', class: '幻人', emoji: '👁️', level: 5, exp: 0, hp: 100, maxHp: 100, baseMaxHp: 100, atk: 15, def: 8, baseDef: 8, spd: 12, baseSpd: 12, skill: '存在质疑', weapon: null, baseAtk: 15, talentPoints: 0, talents: { phantom: { level: 0, name: '幻影之路', desc: '强化闪避与连击', effects: ['闪避率+10%', '连击概率+15%', '幻影分身（额外攻击一次）'] }, shadow: { level: 0, name: '暗影之路', desc: '强化暴击与暗影伤害', effects: ['暴击率+10%', '暗影伤害+20%', '暗影形态（攻击附带吸血）'] }, existence: { level: 0, name: '存在之路', desc: '强化生存与团队增益', effects: ['生命上限+15%', '全队攻击力+5%', '存在之证（复活一次）'] } }, dodgeRate: 0, comboRate: 0, critRate: 0, shadowDamage: 0, lifeSteal: 0, revive: false, reviveUsed: false },
+                { name: '夏特露', class: '研究者', emoji: '📚', level: 3, exp: 0, hp: 80, maxHp: 80, baseMaxHp: 80, atk: 8, def: 10, baseDef: 10, spd: 8, baseSpd: 8, skill: '知识解析', weapon: null, baseAtk: 8, talentPoints: 0, talents: { knowledge: { level: 0, name: '知识之路', desc: '强化法术与解析', effects: ['法术伤害+10%', '解析弱点（无视10%防御）', '全知（技能冷却-1）'] }, wisdom: { level: 0, name: '智慧之路', desc: '强化辅助与治疗', effects: ['治疗量+15%', '全队防御+5%', '智慧光环（全队经验+10%）'] }, secret: { level: 0, name: '秘术之路', desc: '强化禁术与预言', effects: ['禁术伤害+20%', '预言（暴击率+15%）', '命运逆转（一次免死）'] } }, spellDamage: 0, ignoreDefense: 0, healBonus: 0, teamDefBonus: 0, expBonus: 0, fateRevive: false, fateReviveUsed: false },
+                { name: '弗子', class: '前魔王', emoji: '👑', level: 4, exp: 0, hp: 120, maxHp: 120, baseMaxHp: 120, atk: 18, def: 12, baseDef: 12, spd: 6, baseSpd: 6, skill: '魔王威压', weapon: null, baseAtk: 18, talentPoints: 0, talents: { conquest: { level: 0, name: '征服之路', desc: '强化攻击与压制', effects: ['攻击力+10%', '压制（目标防御-15%）', '魔王降临（全体攻击+10%）'] }, dominion: { level: 0, name: '统治之路', desc: '强化防御与统御', effects: ['防御力+15%', '统御（全队生命+10%）', '不朽（每回合恢复5%生命）'] }, legacy: { level: 0, name: '遗产之路', desc: '强化记忆与传承', effects: ['经验获取+15%', '传承（技能伤害+20%）', '王者的记忆（全属性+5%）'] } }, atkBonus: 0, defBonus: 0, teamAtkBonus: 0, teamHpBonus: 0, regen: 0, expBonus: 0, allStatBonus: 0 },
+                { name: '卡莲', class: '圣骑士', emoji: '⚔️', level: 4, exp: 0, hp: 110, maxHp: 110, baseMaxHp: 110, atk: 14, def: 15, baseDef: 15, spd: 7, baseSpd: 7, skill: '圣光审判', weapon: null, baseAtk: 14, talentPoints: 0, talents: { light: { level: 0, name: '圣光之路', desc: '强化治疗与守护', effects: ['治疗量+20%', '守护（全队防御+10%）', '圣光庇护（每回合治疗5%）'] }, justice: { level: 0, name: '审判之路', desc: '强化制裁与净化', effects: ['制裁伤害+15%', '净化（清除负面状态）', '神圣审判（对BOSS伤害+20%）'] }, faith: { level: 0, name: '信仰之路', desc: '强化信念与复活', effects: ['生命上限+20%', '信念（攻击+10%）', '圣光复活（死亡后复活一次）'] } }, healBonus: 0, teamDefBonus: 0, regenHeal: 0, judgmentDmg: 0, bossDmgBonus: 0, faithHpBonus: 0, faithAtkBonus: 0, revive: false, reviveUsed: false },
+                { name: '格林', class: '游侠', emoji: '🏹', level: 3, exp: 0, hp: 85, maxHp: 85, baseMaxHp: 85, atk: 16, def: 6, baseDef: 6, spd: 14, baseSpd: 14, skill: '箭雨风暴', weapon: null, baseAtk: 16, talentPoints: 0, talents: { marksman: { level: 0, name: '射手之路', desc: '强化远程与暴击', effects: ['暴击率+15%', '远程伤害+15%', '百步穿杨（无视闪避）'] }, hunter: { level: 0, name: '猎手之路', desc: '强化追踪与生存', effects: ['对精英/BOSS伤害+15%', '追踪（速度+20%）', '生存本能（闪避+20%）'] }, wind: { level: 0, name: '疾风之路', desc: '强化速度与连击', effects: ['速度+20%', '连击概率+20%', '疾风骤雨（攻击次数+1）'] } }, critRate: 0, rangedDmg: 0, ignoreDodge: 0, eliteDmg: 0, spdBonus: 0, extraAttack: false },
+                { name: '零', class: '虚无使者', emoji: '⚫', level: 5, exp: 0, hp: 130, maxHp: 130, baseMaxHp: 130, atk: 20, def: 10, baseDef: 10, spd: 9, baseSpd: 9, skill: '虚无吞噬', weapon: null, baseAtk: 20, talentPoints: 0, talents: { void: { level: 0, name: '虚无之路', desc: '强化吞噬与转化', effects: ['吞噬效果+30%', '转化（伤害转生命+15%）', '虚无领域（全队吸血+10%）'] }, abyss: { level: 0, name: '深渊之路', desc: '强化暗影与毁灭', effects: ['暗影伤害+25%', '毁灭（暴击伤害+30%）', '深渊凝视（降低目标攻击20%）'] }, existence: { level: 0, name: '存在之路', desc: '强化连接与平衡', effects: ['全队攻击+8%', '平衡（防御+15%）', '存在之桥（全属性+8%）'] } }, voidEffect: 0, lifeSteal: 0, teamLifeSteal: 0, shadowDmg: 0, critDmg: 0, weakenTarget: 0, teamAtk: 0, defBonus: 0, allStatBonus: 0 }
             ],
             currentEnemy: null, potions: 3,
             version: 'V1.6.0 BOND & TOWER',
@@ -3420,16 +3544,20 @@ const game = {
     levelUp(member) {
         member.level++;
         member.exp = 0;
+        member.baseMaxHp += 25;
         member.maxHp += 25;
         member.hp = member.maxHp;
         member.baseAtk += 6;
-        member.atk = member.baseAtk + (member.weapon ? member.weapon.atk : 0);
+        member.baseDef += 5;
+        member.baseSpd += 4;
         member.def += 5;
         member.spd += 4;
+        member.atk = member.baseAtk + (member.weapon ? member.weapon.atk : 0);
         if (member.level % 2 === 0) {
             member.talentPoints = (member.talentPoints || 0) + 1;
             this.notify(`🌳 ${member.name} 获得1点天赋点！`);
         }
+        this.updateTalentEffects();
         this.notify(`${member.name} 升到了 Lv.${member.level}！`);
         this.log(`${member.name} 升级了！各项能力大幅提升。`, 'system');
         this.updateUltimateBtn();
@@ -3469,54 +3597,119 @@ const game = {
         if (!enemy || enemy.hp <= 0) { this.log('战斗已结束！', 'system'); return; }
         if (player.hp <= 0) { this.log(`${player.name}无法战斗！需要休息恢复。`, 'damage'); return; }
         
+        const isBoss = enemy.tag === 'BOSS' || enemy.tag === '终极';
+        const isEliteOrBoss = isBoss || enemy.tag === '精英' || isBoss;
+        const teamLifeSteal = this.getTeamLifeSteal();
+        
         switch(action) {
             case 'attack': {
-                let dmg = Math.max(1, player.atk - Math.floor(enemy.atk * 0.1));
+                let baseDmg = Math.max(1, player.atk - Math.floor(enemy.atk * 0.1));
                 const enchantId = player.weapon?.enchant;
                 const enchant = enchantId ? ENCHANT_TYPES.find(e => e.id === enchantId) : null;
                 
-                // 附魔：狂暴 - HP<30%攻击+30%
+                if (player.ignoreDefense) {
+                    baseDmg = Math.max(1, player.atk - Math.floor(enemy.atk * 0.1 * (1 - player.ignoreDefense)));
+                }
+                
+                if (player.rangedDmg) {
+                    baseDmg = Math.floor(baseDmg * (1 + player.rangedDmg));
+                }
+                
+                if (player.eliteDmg && isEliteOrBoss) {
+                    baseDmg = Math.floor(baseDmg * (1 + player.eliteDmg));
+                }
+                
+                if (player.bossDmgBonus && isBoss) {
+                    baseDmg = Math.floor(baseDmg * (1 + player.bossDmgBonus));
+                }
+                
+                if (player.judgmentDmg) {
+                    baseDmg = Math.floor(baseDmg * (1 + player.judgmentDmg));
+                }
+                
+                let dmg = baseDmg;
+                
                 if (enchantId === 'rage' && player.hp / player.maxHp < 0.3) {
                     dmg = Math.floor(dmg * 1.3);
                     this.log(`💢 狂暴！攻击力+30%！`, 'enchant');
                 }
-                // 附魔：精准 - 暴击率+10%
+                
                 let critRate = player.critRate || 0;
+                let critMultiplier = 1.5;
                 if (enchantId === 'accuracy') critRate += 0.1;
-                if (critRate && Math.random() < critRate) { dmg = Math.floor(dmg * 1.5); this.log(`💥 暴击！`, 'damage'); }
+                if (player.critDmg) critMultiplier += player.critDmg;
+                let isCrit = false;
+                if (critRate && Math.random() < critRate) {
+                    dmg = Math.floor(dmg * critMultiplier);
+                    isCrit = true;
+                    this.log(`💥 暴击！`, 'damage');
+                }
+                
                 if (player.shadowDamage) dmg = Math.floor(dmg * (1 + player.shadowDamage));
                 
-                // 附魔：灼烧 - 额外15%火焰伤害
                 if (enchantId === 'burn') {
+                    enemy.burning = 3;
+                    enemy.burnAtk = player.atk;
                     const burnDmg = Math.floor(dmg * 0.15);
                     dmg += burnDmg;
-                    this.log(`🔥 灼烧！额外 ${burnDmg} 点火焰伤害`, 'enchant');
+                    this.log(`🔥 灼烧！额外 ${burnDmg} 点火焰伤害，敌人陷入灼烧状态！`, 'enchant');
+                }
+                
+                if (player.weakenTarget) {
+                    if (!enemy.weakened) {
+                        enemy.weakened = true;
+                        enemy.originalAtk = enemy.atk;
+                        enemy.atk = Math.floor(enemy.atk * (1 - player.weakenTarget));
+                        this.log(`👁️ 深渊凝视！敌人攻击力降低${Math.floor(player.weakenTarget * 100)}%！`, 'talent');
+                    }
                 }
                 
                 enemy.hp = Math.max(0, enemy.hp - dmg);
-                this.log(`${player.name}攻击了${enemy.name}，造成 ${dmg} 点伤害！`, 'damage');
+                this.log(`${player.name}攻击了${enemy.name}，造成 ${dmg} 点伤害！${isCrit ? '（暴击）' : ''}`, 'damage');
+                
                 if (player.comboRate && Math.random() < player.comboRate) {
                     const comboDmg = Math.floor(dmg * 0.6);
                     enemy.hp = Math.max(0, enemy.hp - comboDmg);
                     this.log(`⚡ 连击！额外造成 ${comboDmg} 点伤害！`, 'damage');
                 }
+                
+                if (player.phantomStrike) {
+                    const phantomDmg = Math.floor(dmg * 0.5);
+                    enemy.hp = Math.max(0, enemy.hp - phantomDmg);
+                    this.log(`👻 幻影分身！额外造成 ${phantomDmg} 点幻影伤害！`, 'talent');
+                }
+                
+                if (player.extraAttack) {
+                    const extraDmg = Math.floor(dmg * 0.7);
+                    enemy.hp = Math.max(0, enemy.hp - extraDmg);
+                    this.log(`🌪️ 疾风骤雨！追加一次攻击，造成 ${extraDmg} 点伤害！`, 'talent');
+                }
+                
                 if (player.lifeSteal) {
                     const heal = Math.floor(dmg * player.lifeSteal);
                     player.hp = Math.min(player.maxHp, player.hp + heal);
                     this.log(`💚 吸血恢复 ${heal} HP`, 'heal');
                 }
-                // 附魔：汲取 - 攻击恢复10%伤害生命
+                
+                if (teamLifeSteal > 0) {
+                    const teamHeal = Math.floor(dmg * teamLifeSteal);
+                    player.hp = Math.min(player.maxHp, player.hp + teamHeal);
+                    this.log(`🖤 虚无领域！全队吸血恢复 ${teamHeal} HP`, 'talent');
+                }
+                
                 if (enchantId === 'leech') {
                     const leechHeal = Math.floor(dmg * 0.1);
                     player.hp = Math.min(player.maxHp, player.hp + leechHeal);
                     this.log(`🩸 汲取恢复 ${leechHeal} HP`, 'enchant');
                 }
-                // 附魔：冰冻 - 降低敌人攻击15%（2回合）
+                
                 if (enchantId === 'frost' && !enemy.frosted) {
                     enemy.frosted = 2;
+                    enemy.frostReduction = 0.15;
                     enemy.atk = Math.floor(enemy.atk * 0.85);
                     this.log(`❄️ 冰冻！${enemy.name} 攻击力降低15%（2回合）`, 'enchant');
                 }
+                
                 if (enemy.hp <= 0) { this.winBattle(); return; }
                 this.enemyTurn();
                 break;
@@ -3524,18 +3717,41 @@ const game = {
             case 'skill': {
                 if (player.level < 3) { this.log('技能尚未解锁！', 'system'); return; }
                 if (player.name === '零' && player.skill === '虚无吞噬') {
-                    const absorbAmount = Math.floor(enemy.atk * 1.5) + Math.floor(player.atk * 0.5);
+                    const voidBonus = player.voidEffect ? 1 + player.voidEffect : 1;
+                    const absorbAmount = Math.floor((enemy.atk * 1.5 + player.atk * 0.5) * voidBonus);
                     player.hp = Math.min(player.hp + absorbAmount, player.maxHp);
-                    const reflectDmg = Math.floor(player.atk * 2);
+                    let reflectDmg = Math.floor(player.atk * 2);
+                    if (player.shadowDamage) reflectDmg = Math.floor(reflectDmg * (1 + player.shadowDamage));
+                    if (player.shadowDmg) reflectDmg = Math.floor(reflectDmg * (1 + player.shadowDmg));
+                    if (player.bossDmgBonus && isBoss) reflectDmg = Math.floor(reflectDmg * (1 + player.bossDmgBonus));
                     enemy.hp = Math.max(0, enemy.hp - reflectDmg);
                     this.log(`${player.name}发动「虚无吞噬」！吸收 ${absorbAmount} 点伤害并恢复生命，同时反射 ${reflectDmg} 点虚无伤害！`, 'ultimate-skill');
                 } else {
                     const skillMultiplier = 3 + (player.level * 0.3);
                     let skillDmg = Math.floor(player.atk * skillMultiplier);
                     if (player.spellDamage) skillDmg = Math.floor(skillDmg * (1 + player.spellDamage));
+                    if (player.shadowDamage) skillDmg = Math.floor(skillDmg * (1 + player.shadowDamage));
                     if (player.shadowDmg) skillDmg = Math.floor(skillDmg * (1 + player.shadowDmg));
+                    if (player.judgmentDmg) skillDmg = Math.floor(skillDmg * (1 + player.judgmentDmg));
+                    if (player.bossDmgBonus && isBoss) skillDmg = Math.floor(skillDmg * (1 + player.bossDmgBonus));
+                    if (player.eliteDmg && isEliteOrBoss) skillDmg = Math.floor(skillDmg * (1 + player.eliteDmg));
+                    
+                    let critRate = player.critRate || 0;
+                    let critMultiplier = 1.5;
+                    if (player.critDmg) critMultiplier += player.critDmg;
+                    if (critRate && Math.random() < critRate) {
+                        skillDmg = Math.floor(skillDmg * critMultiplier);
+                        this.log(`💥 技能暴击！`, 'damage');
+                    }
+                    
                     enemy.hp = Math.max(0, enemy.hp - skillDmg);
                     this.log(`${player.name}使用了"${player.skill}"，造成 ${skillDmg} 点伤害！`, 'damage');
+                    
+                    if (player.lifeSteal) {
+                        const heal = Math.floor(skillDmg * player.lifeSteal);
+                        player.hp = Math.min(player.maxHp, player.hp + heal);
+                        this.log(`💚 技能吸血恢复 ${heal} HP`, 'heal');
+                    }
                 }
                 if (enemy.hp <= 0) { this.winBattle(); return; }
                 this.enemyTurn();
@@ -3617,6 +3833,19 @@ const game = {
         const enemy = this.data.currentEnemy;
         if (!enemy || enemy.hp <= 0) return;
         if (aliveMembers.length === 0) return;
+        
+        if (enemy.burning && enemy.burning > 0) {
+            const burnDmg = Math.floor((enemy.burnAtk || enemy.atk) * 0.05);
+            enemy.hp = Math.max(0, enemy.hp - burnDmg);
+            this.log(`🔥 灼烧效果！${enemy.name} 受到 ${burnDmg} 点持续灼烧伤害！`, 'enchant');
+            enemy.burning--;
+            if (enemy.hp <= 0) { this.winBattle(); return; }
+            if (enemy.burning <= 0) {
+                delete enemy.burning;
+                delete enemy.burnAtk;
+            }
+        }
+        
         const target = aliveMembers[Math.floor(Math.random() * aliveMembers.length)];
         let atkMultiplier = enemy.tag === '终极' ? 1.4 : (enemy.tag === 'BOSS' ? 1.15 : 1);
         if (enemy.tag === '终极' && enemy.hp / enemy.maxHp < 0.3) {
@@ -3624,48 +3853,111 @@ const game = {
             this.log('💀 终极BOSS进入狂暴状态！', 'boss');
         }
         let dmg = Math.max(1, Math.floor(enemy.atk * atkMultiplier) - Math.floor(target.def * 0.2));
+        
         if (target.dodgeRate && Math.random() < target.dodgeRate) {
             this.log(`🔄 ${target.name} 闪避了攻击！`, 'heal');
+            this.endOfEnemyTurnEffects();
             return;
         }
-        // 附魔：守护 - 30%概率减半伤害
+        
         const targetEnchant = target.weapon?.enchant;
         if (targetEnchant === 'guard' && Math.random() < 0.3) {
             dmg = Math.floor(dmg / 2);
             this.log(`🛡️ 守护！伤害减半！`, 'enchant');
         }
-        target.hp = Math.max(0, target.hp - dmg);
+        
+        let actualDmg = dmg;
+        if (target.voidEffect && target.name === '零') {
+            actualDmg = Math.floor(dmg * (1 - target.voidEffect * 0.3));
+            const absorbed = dmg - actualDmg;
+            if (absorbed > 0) {
+                target.hp = Math.min(target.maxHp, target.hp + absorbed);
+                this.log(`⚫ 虚无吞噬！吸收了 ${absorbed} 点伤害并转化为生命！`, 'talent');
+            }
+        }
+        
+        target.hp = Math.max(0, target.hp - actualDmg);
         const attackType = enemy.tag === '终极' ? '毁灭级' : (enemy.tag === 'BOSS' ? '强力' : '');
-        this.log(`${enemy.name} 对${target.name}发动了${attackType}攻击，造成 ${dmg} 点伤害！`, enemy.tag === '终极' ? 'ultimate' : 'damage');
-        // 附魔：荆棘 - 反弹15%伤害
+        this.log(`${enemy.name} 对${target.name}发动了${attackType}攻击，造成 ${actualDmg} 点伤害！`, enemy.tag === '终极' ? 'ultimate' : 'damage');
+        
         if (targetEnchant === 'thorn') {
-            const reflectDmg = Math.floor(dmg * 0.15);
+            const reflectDmg = Math.floor(actualDmg * 0.15);
             enemy.hp = Math.max(0, enemy.hp - reflectDmg);
             this.log(`🌿 荆棘反弹 ${reflectDmg} 点伤害！`, 'enchant');
             if (enemy.hp <= 0) { this.winBattle(); return; }
         }
+        
         if (target.hp <= 0) {
-            target.hp = 0;
-            this.log(`${target.name}倒下了...`, enemy.tag === '终极' ? 'ultimate' : 'boss');
-            const stillAlive = this.data.members.filter(m => m.hp > 0);
-            if (stillAlive.length === 0) {
-                setTimeout(() => {
-                    if (confirm(`被${enemy.name}击败了...是否重新开始？`)) {
-                        this.deleteSave(this.currentSlot);
-                        location.reload();
-                    }
-                }, 1000);
+            let revived = false;
+            if (target.revive && !target.reviveUsed) {
+                target.reviveUsed = true;
+                target.hp = Math.floor(target.maxHp * 0.3);
+                this.log(`✨ ${target.name} 的复活效果触发！以30%生命值复活！`, 'heal');
+                revived = true;
+            } else if (target.fateRevive && !target.fateReviveUsed) {
+                target.fateReviveUsed = true;
+                target.hp = 1;
+                this.log(`🔮 ${target.name} 的命运逆转触发！免死一次，剩余1HP！`, 'heal');
+                revived = true;
+            }
+            
+            if (!revived) {
+                target.hp = 0;
+                this.log(`${target.name}倒下了...`, enemy.tag === '终极' ? 'ultimate' : 'boss');
+                const stillAlive = this.data.members.filter(m => m.hp > 0);
+                if (stillAlive.length === 0) {
+                    setTimeout(() => {
+                        if (confirm(`被${enemy.name}击败了...是否重新开始？`)) {
+                            this.deleteSave(this.currentSlot);
+                            location.reload();
+                        }
+                    }, 1000);
+                }
             }
         }
-        // 冰冻状态回合递减
+        
+        this.endOfEnemyTurnEffects();
+        this.renderMembers();
+    },
+    
+    endOfEnemyTurnEffects() {
+        const enemy = this.data.currentEnemy;
+        if (!enemy) return;
+        
         if (enemy.frosted && enemy.frosted > 0) {
             enemy.frosted--;
             if (enemy.frosted <= 0) {
-                enemy.atk = Math.floor(enemy.atk / 0.85); // 恢复攻击
+                if (enemy.originalAtk) {
+                    enemy.atk = enemy.originalAtk;
+                } else {
+                    enemy.atk = Math.ceil(enemy.atk / (1 - (enemy.frostReduction || 0.15)));
+                }
                 delete enemy.frosted;
+                delete enemy.frostReduction;
                 this.log(`❄️ ${enemy.name} 的冰冻效果解除了！`, 'enchant');
             }
         }
+        
+        this.data.members.forEach(m => {
+            if (m.hp <= 0) return;
+            
+            if (m.regen) {
+                const regenHeal = Math.floor(m.maxHp * m.regen);
+                if (regenHeal > 0 && m.hp < m.maxHp) {
+                    m.hp = Math.min(m.maxHp, m.hp + regenHeal);
+                    this.log(`💪 不朽！${m.name} 每回合恢复 ${regenHeal} HP`, 'talent');
+                }
+            }
+            
+            if (m.regenHeal) {
+                const lightHeal = Math.floor(m.maxHp * m.regenHeal);
+                if (lightHeal > 0 && m.hp < m.maxHp) {
+                    m.hp = Math.min(m.maxHp, m.hp + lightHeal);
+                    this.log(`✨ 圣光庇护！${m.name} 每回合恢复 ${lightHeal} HP`, 'talent');
+                }
+            }
+        });
+        
         this.renderMembers();
     },
     
